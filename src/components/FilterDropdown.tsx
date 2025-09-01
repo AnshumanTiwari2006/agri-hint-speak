@@ -34,7 +34,7 @@ export default function FilterDropdown({
     if (newValue === "guide") {
       setShowGuide(true);
     } else {
-      onChange(newValue);
+      onChange(newValue === "all" ? "" : newValue);
     }
   };
 
@@ -44,7 +44,7 @@ export default function FilterDropdown({
         <label className="block text-sm font-medium text-foreground mb-2">
           {label}
         </label>
-        <Select value={value} onValueChange={handleValueChange}>
+        <Select value={value || "all"} onValueChange={handleValueChange}>
           <SelectTrigger className="w-full bg-background border-border hover:border-primary/50 focus:ring-primary/20">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
@@ -58,7 +58,7 @@ export default function FilterDropdown({
                 ℹ️ मार्गदर्शन
               </div>
             </SelectItem>
-            <SelectItem value="" className="hover:bg-muted/50">
+            <SelectItem value="all" className="hover:bg-muted/50">
               सभी
             </SelectItem>
             {options.map((option) => (
