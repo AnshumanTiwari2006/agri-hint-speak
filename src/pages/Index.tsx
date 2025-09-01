@@ -1,11 +1,22 @@
 import { useState, useEffect } from 'react';
 import AdvisoryCard from '@/components/AdvisoryCard';
+import FiltersSection, { type FilterState } from '@/components/FiltersSection';
 import { fetchAdvisory, type AdvisoryResponse } from '@/lib/api';
 import { Loader2, Wheat } from 'lucide-react';
 
 const Index = () => {
   const [advisory, setAdvisory] = useState<AdvisoryResponse | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterState>({
+    cropType: "",
+    soilType: "",
+    season: "",
+    irrigation: "",
+    fertilizer: "",
+    pestDisease: "",
+    region: "",
+    budget: "",
+  });
 
   useEffect(() => {
     const loadInitialAdvisory = async () => {
@@ -24,6 +35,26 @@ const Index = () => {
 
   const handleNewAdvisory = (newAdvisory: AdvisoryResponse) => {
     setAdvisory(newAdvisory);
+  };
+
+  const handleFilterChange = (filterType: keyof FilterState, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters({
+      cropType: "",
+      soilType: "",
+      season: "",
+      irrigation: "",
+      fertilizer: "",
+      pestDisease: "",
+      region: "",
+      budget: "",
+    });
   };
 
   return (
@@ -45,6 +76,13 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Filters Section */}
+        <FiltersSection
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+        />
+
         {isInitialLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
